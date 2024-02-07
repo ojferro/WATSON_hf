@@ -1,6 +1,6 @@
 import requests
 
-API_TOKEN = "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"
+API_TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 API_URL = "https://api-inference.huggingface.co/models/openai/whisper-base"
 headers = {"Authorization": f"Bearer {API_TOKEN}"}
 
