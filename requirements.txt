@@ -1,0 +1,4 @@
+TTS
+gradio_client
+
+# Install espeak from https://github.com/espeak-ng/espeak-ng/releases/
