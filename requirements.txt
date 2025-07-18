@@ -1,4 +1,12 @@
 TTS
 gradio_client
+pygame
 
 # Install espeak from https://github.com/espeak-ng/espeak-ng/releases/
+
+
+
+
+
+# Only for local:
+accelerate

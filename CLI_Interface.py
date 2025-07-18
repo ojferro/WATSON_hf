@@ -1,14 +1,21 @@
 from gradio_client import Client
 import time
 from TTS.api import TTS
-import pygame as pg
 import re
+
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # Suppress the pygame welcome message
+import pygame as pg
 
 # Pygame for the audio management
 pg.init()
 
+print("Here0")
+
 # TTS model
 tts = TTS('tts_models/en/vctk/vits')
+
+print("Here1")
 
 # NLU model
 client = Client("https://huggingface-projects-llama-2-13b-chat.hf.space/--replicas/b2iov/")
@@ -18,6 +25,8 @@ TEMPERATURE=0.75
 TOP_P=0.75
 TOP_K=50
 REP_PENALTY=1.2
+
+print("Here2")
 
 # sys_prompt="You are a British assistant. You are professional, polite, reply concisely, and always tell the truth. Your responses should be short. \
 # If you do not know how to do something, you ask me rather than making something up. \
@@ -30,10 +39,14 @@ REP_PENALTY=1.2
 # Here are the action functions available to you: \
 # turn_on(name), turn_off(name), play_song(name), pause_song(), set_timer(time_in_minutes), set_reminder(reminder_name, day:hour:minute), get_weather(), get_current_time(), set_alarm(hour:minute), null()."
 
-sys_prompt = "Match the best function to my prompt our of the following list. If none are applicable, reply with null. \
-Only reply with one of these functions, no extra words. \
-turn_on(string: name), turn_off(string: name), play_song(string: name), pause(), set_timer(int: time_in_minutes), \
-set_reminder(string: reminder_name, string: month, int: day, int: hour, int: minute), get_weather(string (optional): location), get_current_time(), set_alarm(hour:minute), null()."
+sys_prompt="You are a British assistant called Alice. You reply concisely and always tell the truth. Your responses should be short. \
+Do not use italics gestures, do not role play actions. \
+I am Oswaldo Ferro, a 26 year old man, and your creator."
+
+# sys_prompt = "Match the best function to my prompt our of the following list. If none are applicable, reply with null. \
+# Only reply with one of these functions, no extra words. \
+# turn_on(string: name), turn_off(string: name), play_song(string: name), pause(), set_timer(int: time_in_minutes), \
+# set_reminder(string: reminder_name, string: month, int: day, int: hour, int: minute), get_weather(string (optional): location), get_current_time(), set_alarm(hour:minute), null()."
 
 while(True):
     user_prompt = input("> ")
