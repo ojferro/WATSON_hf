@@ -14,11 +14,13 @@ print("Here0")
 
 # TTS model
 tts = TTS('tts_models/en/vctk/vits')
+# xtts = TTS("tts_models/multilingual/multi-dataset/xtts_v2", gpu=True)
 
 print("Here1")
 
 # NLU model
-client = Client("https://huggingface-projects-llama-2-13b-chat.hf.space/--replicas/b2iov/")
+# client = Client("https://huggingface-projects-llama-2-13b-chat.hf.space/--replicas/b2iov/")
+client = Client("huggingface-projects/llama-2-13b-chat")
 
 MAX_NEW_TOKENS=2048
 TEMPERATURE=0.75
@@ -39,14 +41,12 @@ print("Here2")
 # Here are the action functions available to you: \
 # turn_on(name), turn_off(name), play_song(name), pause_song(), set_timer(time_in_minutes), set_reminder(reminder_name, day:hour:minute), get_weather(), get_current_time(), set_alarm(hour:minute), null()."
 
-sys_prompt="You are a British assistant called Alice. You reply concisely and always tell the truth. Your responses should be short. \
-Do not use italics gestures, do not role play actions. \
-I am Oswaldo Ferro, a 26 year old man, and your creator."
-
 # sys_prompt = "Match the best function to my prompt our of the following list. If none are applicable, reply with null. \
 # Only reply with one of these functions, no extra words. \
 # turn_on(string: name), turn_off(string: name), play_song(string: name), pause(), set_timer(int: time_in_minutes), \
 # set_reminder(string: reminder_name, string: month, int: day, int: hour, int: minute), get_weather(string (optional): location), get_current_time(), set_alarm(hour:minute), null()."
+
+sys_prompt = "You are a helpful assistant. You reply honestly and concisely. Reply in 50 characters or less."
 
 while(True):
     user_prompt = input("> ")
@@ -54,7 +54,15 @@ while(True):
         break
 
     start_time = time.time()
-    response = client.predict(user_prompt, sys_prompt, MAX_NEW_TOKENS, TEMPERATURE,TOP_P, TOP_K, REP_PENALTY, api_name="/chat")
+    response = client.predict(
+        message=user_prompt,
+        request=sys_prompt,
+        param_3=MAX_NEW_TOKENS,
+        param_4=TEMPERATURE,
+        param_5=TOP_P,
+        param_6=TOP_K,
+        param_7=REP_PENALTY,
+        api_name="/chat")
     end_time = time.time()
 
     # Find everything within {}, including the {} symbols
@@ -70,6 +78,7 @@ while(True):
     if len(response.strip()) > 0: 
         # Run TTS
         wav_out = tts.tts_to_file(text=response, speaker='p335', file_path=f"./output_samples/out.wav", print_text=False)
+        # wav_out = xtts.tts_to_file(text=response, speaker='p335', file_path=f"./output_samples/out.wav", language="en", split_sentences=True, print_text=False)
 
         # Load the audio file
         sound = pg.mixer.Sound(f"./output_samples/out.wav")
